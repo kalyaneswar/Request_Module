@@ -224,3 +224,78 @@ print("Response JSON:", response.json())
 - **Non-idempotent**: Repeating may create multiple resources or have different effects (`POST`, `PATCH`)
 
 ---
+
+## 🖼️ Sending Files or Images with Python `requests`
+
+You can send any file (text, image, etc.) using the `files` parameter in a POST request.
+
+---
+
+### 📂 1. Upload a File (e.g., `.txt` or `.log`)
+
+```python
+import requests
+
+url = "https://httpbin.org/post"
+file_path = "sample.txt"
+
+with open(file_path, 'rb') as f:
+    files = {'file': f}
+    response = requests.post(url, files=files)
+
+print(response.status_code)
+print(response.json())
+```
+
+### 🖼️ 2. Upload an Image (e.g., .jpg, .png)
+
+```python
+import requests
+
+url = "https://httpbin.org/post"
+image_path = "image.png"
+
+with open(image_path, 'rb') as img:
+    files = {'image': ('image.png', img, 'image/png')}
+    response = requests.post(url, files=files)
+
+print(response.status_code)
+print(response.json())
+
+```
+## 🧪 Real Use Cases 
+* Upload logs to APIs (e.g., Jira, ServiceNow)
+
+* Send screenshots in automation reports
+
+* Push zipped backups or configs to remote APIs
+
+
+## ⏱️ Setting Timeouts in Python `requests`
+
+Use the `timeout` parameter to specify how long (in seconds) to wait for:
+
+- **Connection timeout** – time to establish a connection
+- **Read timeout** – time to wait for the server to send data
+
+---
+
+### 🧪 Example: Simple Timeout
+
+```python
+import requests
+
+url = "https://httpbin.org/delay/5"  # Delays response by 5 seconds
+
+try:
+    response = requests.get(url, timeout=3)  # Timeout set to 3 seconds
+    print(response.status_code)
+except requests.exceptions.Timeout:
+    print("⏰ Request timed out!")
+```
+
+### ⚙️ Specify (connect_timeout, read_timeout)
+```python
+response = requests.get(url, timeout=(2, 5))
+# 2 sec to connect, 5 sec to read response
+```
